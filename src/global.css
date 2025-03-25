@@ -1,0 +1,65 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Helvetica', sans-serif;
+  }
+  
+  body {
+    background-color: #f5f5f5;
+    width: 100%;
+    overflow-x: hidden;
+  }
+  
+  .app {
+    width: 100%;
+  }
+  
+  /* 共享的样式变量 */
+  :root {
+    --primary-color: #4a90e2;
+    --primary-dark: #3a80d2;
+    --text-color: #333;
+    --text-light: #666;
+    --bg-light: #f9f9f9;
+    --bg-dark: #333;
+    --shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* 通用按钮样式 */
+  .btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  .btn:hover {
+    background-color: var(--primary-dark);
+  }
+  
+  .btn-sm {
+    padding: 8px 15px;
+    font-size: 12px;
+  }
+  
+  /* 通用容器样式 */
+  .container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  
+  .section {
+    padding: 60px 0;
+  }
+  
+  /* 高亮文本样式 */
+  .highlight {
+    color: var(--primary-color);
+  }
