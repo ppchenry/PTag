@@ -1,29 +1,61 @@
-// src/components/Partnership.jsx
+
 import React from 'react';
 
 const Partnership = () => {
   const sectionStyle = {
     padding: '60px 20px',
     textAlign: 'center',
-    backgroundColor: 'white',
+    backgroundColor: '#FCF8F3',
+    width: '100vw',
+    height:'698px',
+    marginLeft: 'calc(-50vw + 50%)', 
+    boxSizing: 'border-box',
+  };
+
+  const containerStyle = {
+    maxWidth: '1200px',
+    margin: '0 auto',
   };
 
   const headingStyle = {
-    marginBottom: '20px',
-    fontSize: '24px',
+    marginBottom: '30px',
+    fontSize: '28px',
+    fontWeight: 'bold',
+    color: '#000',
   };
 
   const paragraphStyle = {
-    fontSize: '14px',
-    color: '#666',
-    marginBottom: '10px',
+    fontSize: '16px',
+    color: '#333',
+    marginBottom: '20px',
+    lineHeight: '1.6',
+    maxWidth: '800px',
+    margin: '0 auto 20px',
+  };
+
+  const partnerImageStyle = {
+    maxWidth: '100%',
+    height: 'auto',
+    margin: '40px auto 0',
+    
   };
 
   return (
     <section style={sectionStyle}>
-      <h2 style={headingStyle}>愛護動物協會 X 寵物仔仔 聯乘系列</h2>
-      <p style={paragraphStyle}>各宠物协会推广使用，专为宠物安全考虑</p>
-      <p style={paragraphStyle}>每售出一个PTag LOCATE PET TAG，将会有金额回馈至动物协会</p>
+      <div style={containerStyle}>
+        <h2 style={headingStyle}>愛護動物協會 X 寵物仔仔 聯乘系列</h2>
+
+        <p style={paragraphStyle}>
+          今次與愛協合作，推出愛協會員PTAG優惠，
+          旨希望更多人使用"PTAG LOCATE PET TAG"，從而改善香港走失寵物既情況
+        </p>
+
+        <img
+          src="/partner.png"
+          alt="愛護動物協會 X PTag Pet Boys Club"
+          style={partnerImageStyle}
+        />
+      </div>
     </section>
   );
 };

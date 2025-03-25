@@ -30,161 +30,182 @@ const MajorFunctions = () => {
   ];
 
   const sectionStyle = {
-    width: '100%',
+    width: '100vw',
     backgroundColor: '#FCF8F3',
-    height: '650px', // 增加高度
+    height: '548px',
     display: 'flex',
-    flexDirection: 'column',
+    marginLeft: 'calc(-50vw + 50%)',
+    boxSizing: 'border-box',
   };
 
   const contentContainerStyle = {
-    maxWidth: '1400px', // 增加最大宽度
+    maxWidth: '1400px',
     width: '100%',
     margin: '0 auto',
-    padding: '60px 40px', // 增加内边距
+    padding: '40px 40px',
     display: 'flex',
-    flexDirection: 'column',
     height: '100%',
   };
 
-  const titleAreaStyle = {
-    width: '25%',
-    paddingRight: '20px',
+  const titleColumnStyle = {
+    width: '18%',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    paddingTop: '20px',
+    paddingRight: '30px',
   };
 
   const mainTitleStyle = {
-    fontSize: '46px', // 增大字体
-    fontWeight: '800', // 加粗
-    lineHeight: '1.2',
+    fontSize: '46px',
+    fontWeight: '800',
+    lineHeight: '1.1',
     fontFamily: 'Helvetica, Arial, sans-serif',
-    margin: '0 0 10px 0', // 增加底部外边距
+    margin: '0 0 0 0',
+    color: '#000',
   };
 
   const subTitleStyle = {
-    fontSize: '46px', // 增大字体
-    fontWeight: '800', // 加粗
-    lineHeight: '1.2',
+    fontSize: '46px',
+    fontWeight: '800',
+    lineHeight: '1.1',
     fontFamily: 'Helvetica, Arial, sans-serif',
     margin: '0',
+    color: '#000',
   };
 
   const highlightStyle = {
     color: '#4A90E2',
   };
 
-  const gridContainerStyle = {
+  const functionsGridStyle = {
     display: 'flex',
-    width: '100%',
+    width: '82%',
     height: '100%',
-    marginTop: '20px',
+    position: 'relative',
   };
 
-  const columnStyle = {
+  const functionColumnStyle = {
     flex: '1',
     display: 'flex',
     flexDirection: 'column',
-    borderRight: '1px solid #E0E0E0',
-    margin: '0 10px', // 添加水平外边距
+    padding: '0 30px',
+    position: 'relative',
   };
 
-  const lastColumnStyle = {
-    borderRight: 'none',
+  const verticalLineStyle = {
+    position: 'absolute',
+    top: '0',
+    bottom: '0',
+    width: '1px',
+    backgroundColor: '#e0e0e0',
+  };
+
+  const horizontalLineStyle = {
+    position: 'absolute',
+    left: '0',
+    right: '0',
+    height: '1px',
+    backgroundColor: '#e0e0e0',
+    top: '50%',
   };
 
   const functionItemStyle = {
-    padding: '0 30px', // 增加水平内边距
-    flex: '1',
-    borderBottom: '1px solid #E0E0E0',
+    height: '50%',
+    boxSizing: 'border-box',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    margin: '15px 0', // 添加垂直外边距
+    padding: '30px 0',
   };
 
-  const bottomFunctionStyle = {
-    borderBottom: 'none',
+  const functionNumberStyle = {
+    fontSize: '28px',
+    fontWeight: '700',
+    color: '#4A90E2',
+    marginBottom: '10px',
+    fontFamily: 'Helvetica, Arial, sans-serif',
   };
 
   const functionTitleStyle = {
-    fontSize: '28px', // 增大字体
-    fontWeight: '700', // 加粗
+    fontSize: '28px',
+    fontWeight: '700',
     color: '#4A90E2',
-    marginBottom: '20px', // 增加底部外边距
+    marginBottom: '15px',
     fontFamily: 'Helvetica, Arial, sans-serif',
   };
 
   const functionDescStyle = {
-    fontSize: '18px', // 增大字体
-    fontWeight: '500', // 增加字重
+    fontSize: '16px',
+    fontWeight: '400',
     color: '#333',
-    lineHeight: '1.7', // 增加行高
+    lineHeight: '1.6',
     fontFamily: 'Helvetica, Arial, sans-serif',
   };
 
   return (
     <section style={sectionStyle}>
       <div style={contentContainerStyle}>
-        <div style={gridContainerStyle}>
-          {/* Left Title Column */}
-          <div style={{...columnStyle, flex: '0 0 25%'}}>
-            <div style={{padding: '0 20px'}}>
-              <h2 style={mainTitleStyle}>
-                PTag <span style={highlightStyle}>Air</span>
-              </h2>
-              <h3 style={subTitleStyle}>五大功能</h3>
-            </div>
-          </div>
+        {/* 左侧标题列 */}
+        <div style={titleColumnStyle}>
+          <h2 style={mainTitleStyle}>
+            PTag <span style={highlightStyle}>Air</span>
+          </h2>
+          <h3 style={subTitleStyle}>五大功能</h3>
+        </div>
+
+        {/* 功能列表网格 */}
+        <div style={functionsGridStyle}>
           
-          {/* Middle Column (Functions 1, 4) */}
-          <div style={columnStyle}>
-            {/* Function 1 */}
+          <div style={{ ...verticalLineStyle, left: '33.33%' }}></div>
+          <div style={{ ...verticalLineStyle, left: '66.66%' }}></div>
+
+          {/* 水平分隔线 */}
+          {/* <div style={horizontalLineStyle}></div> */}
+
+          {/* 第一列：功能1和4 */}
+          <div style={functionColumnStyle}>
             <div style={functionItemStyle}>
               <h3 style={functionTitleStyle}>
                 {functions[0].id}. {functions[0].title}
               </h3>
               <p style={functionDescStyle}>{functions[0].description}</p>
             </div>
-            
-            {/* Function 4 */}
-            <div style={{...functionItemStyle, ...bottomFunctionStyle}}>
+            <div style={functionItemStyle}>
               <h3 style={functionTitleStyle}>
                 {functions[3].id}. {functions[3].title}
               </h3>
               <p style={functionDescStyle}>{functions[3].description}</p>
             </div>
           </div>
-          
-          {/* Middle Column (Functions 2, 5) */}
-          <div style={columnStyle}>
-            {/* Function 2 */}
+
+          {/* 第二列：功能2和5 */}
+          <div style={functionColumnStyle}>
             <div style={functionItemStyle}>
               <h3 style={functionTitleStyle}>
                 {functions[1].id}. {functions[1].title}
               </h3>
               <p style={functionDescStyle}>{functions[1].description}</p>
             </div>
-            
-            {/* Function 5 */}
-            <div style={{...functionItemStyle, ...bottomFunctionStyle}}>
+            <div style={functionItemStyle}>
               <h3 style={functionTitleStyle}>
                 {functions[4].id}. {functions[4].title}
               </h3>
               <p style={functionDescStyle}>{functions[4].description}</p>
             </div>
           </div>
-          
-          {/* Right Column (Function 3) */}
-          <div style={{...columnStyle, ...lastColumnStyle}}>
-            {/* Function 3 */}
+
+          {/* 第三列：功能3和空白区域 */}
+          <div style={functionColumnStyle}>
             <div style={functionItemStyle}>
               <h3 style={functionTitleStyle}>
                 {functions[2].id}. {functions[2].title}
               </h3>
               <p style={functionDescStyle}>{functions[2].description}</p>
             </div>
-            
-            {/* Empty space to maintain grid structure */}
-            <div style={{...functionItemStyle, ...bottomFunctionStyle}}></div>
+            <div style={functionItemStyle}>
+              
+            </div>
           </div>
         </div>
       </div>

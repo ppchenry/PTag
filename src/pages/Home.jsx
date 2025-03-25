@@ -8,6 +8,7 @@ import MajorFunctions from '../components/MajorFunctions';
 import ProductSelection from '../components/ProductSelection';
 import Partnership from '../components/Partnership';
 import Footer from '../components/Footer';
+import Sponsors from '../components/Sponsors';
 
 const Home = () => {
   return (
@@ -20,6 +21,7 @@ const Home = () => {
         <MajorFunctions />
         <ProductSelection />
         <Partnership />
+        <Sponsors />
       </div>
       <Footer />
     </div>
