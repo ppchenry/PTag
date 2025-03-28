@@ -51,7 +51,7 @@ const Partnership = () => {
         </p>
 
         <img
-          src="/partner.png"
+          src="/atlas/partner.png"
           alt="愛護動物協會 X PTag Pet Boys Club"
           style={partnerImageStyle}
         />

@@ -2,25 +2,34 @@
 import React from 'react';
 import Navbar from '../components/Navbar';
 import HeroSection from '../components/HeroSection';
-import FeaturesOverview from '../components/FeaturesOverview';
 import AiSection from '../components/AiSection';
 import MajorFunctions from '../components/MajorFunctions';
 import ProductSelection from '../components/ProductSelection';
-import Partnership from '../components/Partnership';
 import Footer from '../components/Footer';
 import Sponsors from '../components/Sponsors';
 
+
+
 const Home = () => {
+  const pageStyle = {
+    display: 'flex',
+    flexDirection: 'column',
+    minHeight: '100vh',
+  };
+
+  const contentStyle = {
+    flex: '1 0 auto',
+  };
+
   return (
-    <div >
+    <div style={pageStyle}>
       <Navbar />
-      <HeroSection />
-      <div >
-        <FeaturesOverview />
-        <AiSection />
+      <div style={contentStyle}>
+        <HeroSection />
         <MajorFunctions />
+        <AiSection />
         <ProductSelection />
-        <Partnership />
+        
         <Sponsors />
       </div>
       <Footer />

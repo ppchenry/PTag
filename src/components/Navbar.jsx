@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import '../fonts.css';
 
 const Navbar = () => {
   // Create a placeholder div with the same height as navbar to prevent content jump
@@ -34,6 +35,27 @@ const Navbar = () => {
     };
   }, []);
 
+  // 平滑滚动到目标元素的函数
+  const scrollToSection = (sectionId) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      // 关闭移动端菜单（如果打开）
+      if (isMenuOpen) {
+        setIsMenuOpen(false);
+      }
+
+      // 计算导航栏高度，保证内容不被导航栏遮挡
+      const navbarHeight = 77;
+      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+      const offsetPosition = elementPosition - navbarHeight;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
+  };
+
   // Main navbar container 
   const navbarStyle = {
     display: 'flex',
@@ -41,14 +63,14 @@ const Navbar = () => {
     alignItems: 'center',
     height: '77px',
     width: '100%',
-    backgroundColor: isScrolled ? 'rgba(255, 255, 255, 0.95)' : 'rgba(255, 255, 255, 0.7)', 
-    backdropFilter: 'blur(5px)', 
+    backgroundColor: isScrolled ? 'rgba(255, 255, 255, 0.95)' : 'rgba(255, 255, 255, 0.7)',
+    backdropFilter: 'blur(5px)',
     position: 'fixed',
     top: 0,
     left: 0,
     zIndex: 1000,
-    borderBottom: isScrolled ? '1px solid rgba(238, 238, 238, 0.8)' : 'none', 
-    transition: 'all 0.3s ease-in-out', 
+    borderBottom: isScrolled ? '1px solid rgba(238, 238, 238, 0.8)' : 'none',
+    transition: 'all 0.3s ease-in-out',
   };
 
   // Inner container with proper spacing
@@ -65,21 +87,23 @@ const Navbar = () => {
 
   const logoStyle = {
     fontFamily: 'Helvetica',
-    fontWeight: 700,
+    fontWeight: 'bold',
     fontSize: '36px',
     lineHeight: '100%',
     color: '#000000',
     textDecoration: 'none',
-    textShadow: '0 1px 2px rgba(255, 255, 255, 0.5)', 
+    textShadow: '0 1px 2px rgba(255, 255, 255, 0.5)',
   };
 
   const navLinksContainerStyle = {
+    fontFamily: 'Helvetica',
+    fontWeight:'normal',
     display: 'flex',
     alignItems: 'center',
     gap: '30px',
   };
 
- 
+
   const getNavLinkStyle = (navName) => {
     const isHovered = hoveredNav === navName;
 
@@ -94,10 +118,10 @@ const Navbar = () => {
       cursor: 'pointer',
       transition: 'all 0.2s ease',
       borderRadius: '4px',
-      backgroundColor: isHovered ? 'rgba(240, 247, 255, 0.8)' : 'transparent', 
+      backgroundColor: isHovered ? 'rgba(240, 247, 255, 0.8)' : 'transparent',
       transform: isHovered ? 'translateY(-2px)' : 'translateY(0)',
       boxShadow: isHovered ? '0 2px 4px rgba(0, 0, 0, 0.1)' : 'none',
-      textShadow: '0 1px 1px rgba(255, 255, 255, 0.5)', 
+      textShadow: '0 1px 1px rgba(255, 255, 255, 0.5)',
     };
   };
 
@@ -125,6 +149,15 @@ const Navbar = () => {
     gap: '20px',
   };
 
+  // 处理导航项点击
+  const handleNavClick = (name) => {
+    if (name === 'features') {
+      scrollToSection('majorFunction');
+    } else {
+      console.log(`Clicked: ${name}`);
+    }
+  };
+
   // 渲染导航项
   const renderNavItem = (name, label) => {
     return (
@@ -134,10 +167,10 @@ const Navbar = () => {
         tabIndex={0}
         onMouseEnter={() => setHoveredNav(name)}
         onMouseLeave={() => setHoveredNav(null)}
-        onClick={() => console.log(`Clicked: ${name}`)}
+        onClick={() => handleNavClick(name)}
         onKeyDown={(e) => {
           if (e.key === 'Enter' || e.key === ' ') {
-            console.log(`Keypress on: ${name}`);
+            handleNavClick(name);
           }
         }}
       >
@@ -148,7 +181,6 @@ const Navbar = () => {
 
   return (
     <>
-      
       <div style={navbarPlaceholderStyle}></div>
 
       <nav style={navbarStyle}>

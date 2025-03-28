@@ -1,8 +1,22 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import '../fonts.css';
 
 const ProductSelection = () => {
   const [hoveredId, setHoveredId] = useState(null);
+  const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 0);
+
+  // 添加窗口大小监听
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // 检查是否为移动设备
+  const isMobile = windowWidth <= 767;
 
   const products = [
     {
@@ -30,19 +44,21 @@ const ProductSelection = () => {
       backgroundColor: '#ffffff'
     },
     heading: {
-      fontSize: '28px',
+      fontFamily: 'Helvetica',
+      fontSize: isMobile ? '26px':'44px',
       fontWeight: 'bold',
       marginBottom: '30px',
       color: '#000'
     },
     button: {
-      backgroundColor: '#ffc107',
+      fontFamily: 'Helvetica',
+      backgroundColor: '#FFB60C',
       color: '#000',
       border: 'none',
       padding: '10px 20px',
-      borderRadius: '20px',
-      fontSize: '16px',
-      fontWeight: '500',
+      borderRadius: '3px',
+      fontSize: isMobile ? '15px':'16px',
+      fontWeight: 'bold',
       cursor: 'pointer',
       marginBottom: '40px',
       transition: 'background-color 0.3s'
@@ -50,8 +66,8 @@ const ProductSelection = () => {
     productContainer: {
       display: 'flex',
       justifyContent: 'center',
-      gap: '80px',
-      flexWrap: 'wrap',
+      gap: isMobile ? '20px' : '4%', // 移动端减少间距
+      flexWrap: 'nowrap',
       maxWidth: '1200px',
       margin: '0 auto'
     },
@@ -59,14 +75,15 @@ const ProductSelection = () => {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      width: '250px',
+      width: isMobile ? '48%' : '250px', // 移动端减小宽度
       transition: 'transform 0.3s ease',
       transform: isHovered ? 'translateY(-5px)' : 'translateY(0)'
     }),
     imageContainer: (isHovered) => ({
-      width: '200px',
-      height: '200px',
-      marginBottom: '25px',
+      width: isMobile ? '150px' : '200px', // 移动端使用更小的尺寸
+      height: isMobile ? '150px' : '200px', // 移动端使用更小的尺寸
+      marginBottom: isMobile ? '15px' : '25px', // 减少移动端的底部边距
+      aspectRatio: '1 / 1',
       borderRadius: '50%',
       overflow: 'hidden',
       boxShadow: isHovered
@@ -81,18 +98,21 @@ const ProductSelection = () => {
       objectFit: 'cover'
     },
     title: {
-      fontSize: '22px',
+      fontFamily: 'Helvetica',
+      fontSize: isMobile ? '20px' : '34px', // 移动端使用固定更小的字体
       fontWeight: 'bold',
       marginBottom: '8px',
       color: '#000'
     },
     subtitle: {
-      fontSize: '16px',
-      color: '#666',
+      fontFamily: 'Helvetica',
+      fontSize: isMobile ? '16px' : '21px', // 移动端使用固定更小的字体
+      color: '#050505',
+      fontWeight: '400',
       marginTop: '0'
     },
     highlight: {
-      color: '#4a90e2'
+      color: '#65A8FB'
     }
   };
 
@@ -103,7 +123,7 @@ const ProductSelection = () => {
       <button
         style={styles.button}
         onMouseOver={(e) => { e.currentTarget.style.backgroundColor = '#e6ad06' }}
-        onMouseOut={(e) => { e.currentTarget.style.backgroundColor = '#ffc107' }}
+        onMouseOut={(e) => { e.currentTarget.style.backgroundColor = '#FFB60C' }}
       >
         進一步了解 &gt;
       </button>
