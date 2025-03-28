@@ -2,6 +2,31 @@ import React, { useState, useEffect, useRef } from 'react';
 import { throttle } from 'lodash';
 import '../fonts.css';
 
+// 提取颜色和尺寸为常量
+const COLORS = {
+  primary: '#65A8FB',
+  text: '#050505',
+  background: '#D8CFBC',
+  buttonPrimary: '#FFA500',
+  buttonHover: '#FF8C00',
+  white: 'white',
+  black: 'black',
+};
+
+const FONTS = {
+  titleMobile: '32px',
+  titleDesktop: '56px',
+  subtitleMobile: '18px',
+  subtitleDesktop: '34px',
+  button: '18px',
+};
+
+const SHADOWS = {
+  text: '0 2px 4px rgba(0,0,0,0.3)',
+  subtitleText: '0 2px 4px rgba(0,0,0,0.4)',
+  none: 'none',
+};
+
 const HeroSection = () => {
   const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 0);
   const [scrollPosition, setScrollPosition] = useState(0);
@@ -11,8 +36,9 @@ const HeroSection = () => {
   const previousTimeRef = useRef(null);
   const targetScrollRef = useRef(0);
 
-  // 判断是否为移动设备（屏幕宽度小于768px）
+  // 判断设备类型
   const isMobile = windowWidth < 768;
+  const isIpad = windowWidth >= 768 && windowWidth <= 1024;
 
   // 初始加载动画
   useEffect(() => {
@@ -20,6 +46,7 @@ const HeroSection = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  // 动画函数
   const animate = time => {
     if (previousTimeRef.current !== undefined) {
       const currentScroll = scrollPosition;
@@ -36,6 +63,7 @@ const HeroSection = () => {
     requestRef.current = requestAnimationFrame(animate);
   };
 
+  // 设置事件监听
   useEffect(() => {
     const handleResize = throttle(() => {
       setWindowWidth(window.innerWidth);
@@ -59,23 +87,49 @@ const HeroSection = () => {
     };
   }, []);
 
+  // 通用样式
+  const commonStyles = {
+    // 容器相关通用样式
+    fullWidth: {
+      width: '100vw',
+      marginLeft: 'calc(-50vw + 50%)',
+      boxSizing: 'border-box',
+    },
+
+    // 文本相关通用样式
+    textContainer: {
+      opacity: isVisible ? 1 : 0,
+      transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
+      transition: 'opacity 0.8s, transform 0.8s',
+    },
+
+    // 文本样式
+    brandText: {
+      fontWeight: 'bold',
+      lineHeight: 1,
+    },
+  };
+
+  // 根据设备类型选择不同的对象位置
+  const getObjectPosition = () => {
+    if (isMobile) return '22% center';
+    if (isIpad) return '35% center';
+    return 'center center';
+  };
+
   // 桌面版英雄区域样式
   const desktopHeroContainerStyle = {
-    width: '100vw',
+    ...commonStyles.fullWidth,
     height: '100vh',
     position: 'relative',
     overflow: 'hidden',
     marginTop: '-77px',
     paddingTop: '77px',
-    marginLeft: 'calc(-50vw + 50%)',
-    boxSizing: 'border-box',
   };
 
-  // 移动版整体容器样式 - 包括主图和底部区域
+  // 移动版整体容器样式
   const mobileContainerStyle = {
-    width: '100vw',
-    marginLeft: 'calc(-50vw + 50%)',
-    boxSizing: 'border-box',
+    ...commonStyles.fullWidth,
     position: 'relative',
     overflow: 'hidden',
   };
@@ -83,7 +137,7 @@ const HeroSection = () => {
   // 移动版主图区域样式
   const mobileHeroContainerStyle = {
     width: '100%',
-    height: '72vh', // 设置为视口高度，留出底部空间
+    height: '72vh',
     position: 'relative',
     overflow: 'hidden',
     marginTop: '-77px',
@@ -91,28 +145,19 @@ const HeroSection = () => {
     boxSizing: 'border-box',
   };
 
-  // 移动版底部内容区域样式
-  const mobileBottomSectionStyle = {
-    width: '100%',
-    padding: '30px 20px',
-    backgroundColor: '#D8CFBC',
-    display: 'flex',
-    flexDirection: 'column',
-    position: 'relative',
-    marginTop: '-1px', 
-  };
-
+  // 英雄图片样式
   const heroImageStyle = {
     width: '100%',
     height: '100%',
     objectFit: 'cover',
-    objectPosition: isMobile ? '22% center' : 'center center',
+    objectPosition: getObjectPosition(),
     display: 'block',
     transform: `translate3d(0, 0, 0) scale(${1 + scrollPosition * 0.0003})`,
     transition: 'transform 0.2s linear',
     willChange: 'transform',
   };
 
+  // 覆盖层样式
   const overlayStyle = {
     position: 'absolute',
     top: 0,
@@ -123,6 +168,7 @@ const HeroSection = () => {
     pointerEvents: 'none',
   };
 
+  // 内容包装样式
   const contentWrapperStyle = {
     position: 'absolute',
     top: 0,
@@ -136,6 +182,7 @@ const HeroSection = () => {
     boxSizing: 'border-box',
   };
 
+  // 内部容器样式
   const innerContainerStyle = {
     maxWidth: '1440px',
     width: '100%',
@@ -152,96 +199,109 @@ const HeroSection = () => {
     flexDirection: 'column',
     alignItems: 'flex-start',
     top: '30%',
-    right: '8%',
+    right: isIpad ? '10%' : '8%',
     transform: `translate3d(0, ${-scrollPosition * 0.15}px, 0)`,
     opacity: Math.max(0, 1 - scrollPosition * 0.003),
     transition: 'transform 0.2s linear, opacity 0.2s linear',
     willChange: 'transform, opacity',
   };
 
-  // 移动版布局的标题样式
-  const mobileTitleContainerStyle = {
+  // 标题容器样式 - 桌面和移动共用基础属性
+  const titleContainerBaseStyle = {
+    ...commonStyles.textContainer,
     display: 'flex',
     alignItems: 'center',
     marginBottom: '10px',
-    opacity: isVisible ? 1 : 0,
-    transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
-    transition: 'opacity 0.8s, transform 0.8s',
   };
 
-  // 桌面版布局的标题样式
+  // 桌面版标题容器样式
   const titleContainerStyle = {
-    display: 'flex',
-    alignItems: 'center',
+    ...titleContainerBaseStyle,
     justifyContent: 'flex-start',
-    marginBottom: '10px',
-    opacity: isVisible ? 1 : 0,
-    transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
-    transition: 'opacity 0.8s, transform 0.8s',
   };
 
+  // 移动版标题容器样式
+  const mobileTitleContainerStyle = {
+    ...titleContainerBaseStyle,
+  };
+
+  // PTag文本样式
   const ptagStyle = {
-    color: isMobile ? '#000000' : 'white', // 移动版使用黑色，桌面版使用白色
+    ...commonStyles.brandText,
+    color: COLORS.white,
     marginRight: '10px',
-    fontFamily: '"Helvetica", sans-serif',
-    fontSize: isMobile ? '32px' : '56px',
-    fontWeight: 'bold',
-    lineHeight: 1,
-    textShadow: isMobile ? 'none' : '0 2px 4px rgba(0,0,0,0.3)', // 移动版不需要文字阴影
+    fontSize: isMobile ? FONTS.titleMobile : FONTS.titleDesktop,
+    textShadow: isMobile ? SHADOWS.none : SHADOWS.text,
   };
 
+  // Air文本样式
   const airStyle = {
-    color: '#65A8FB',
-    fontFamily: '"Helvetica", sans-serif',
-    fontSize: isMobile ? '32px' : '56px',
-    fontWeight: 'bold',
-    lineHeight: 1,
-    textShadow: isMobile ? 'none' : '0 2px 4px rgba(0,0,0,0.2)', // 移动版不需要文字阴影
+    ...commonStyles.brandText,
+    color: COLORS.primary,
+    fontSize: isMobile ? FONTS.titleMobile : FONTS.titleDesktop,
+    textShadow: isMobile ? SHADOWS.none : SHADOWS.text,
   };
 
+  // 副标题容器样式
   const subtitleContainerStyle = {
-    opacity: isVisible ? 1 : 0,
-    transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
+    ...commonStyles.textContainer,
     transition: 'opacity 0.8s 0.2s, transform 0.8s 0.2s',
     marginBottom: '20px',
   };
 
+  // 副标题文本样式
   const subtitleStyle = {
-    fontFamily: '"Helvetica", sans-serif',
     fontWeight: 'bold',
-    fontSize: isMobile ? '18px' : '34px',
+    fontSize: isMobile ? FONTS.subtitleMobile : FONTS.subtitleDesktop,
     letterSpacing: '0.05em',
-    color: '#050505',
+    color: COLORS.text,
     padding: '4px 0',
-    textShadow: isMobile ? 'none' : '0 2px 4px rgba(0,0,0,0.4)', // 移动版不需要文字阴影
+    textShadow: isMobile ? SHADOWS.none : SHADOWS.subtitleText,
   };
 
+  // 按钮容器样式
   const buttonContainerStyle = {
-    opacity: isVisible ? 1 : 0,
-    transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
+    ...commonStyles.textContainer,
     transition: 'opacity 0.8s 0.4s, transform 0.8s 0.4s',
     display: 'flex',
     alignItems: 'center',
   };
 
-  const buttonStyle = {
-    backgroundColor: '#FFA500',
-    color: 'black',
+  // 按钮基础样式
+  const buttonBaseStyle = {
+    color: COLORS.black,
     border: 'none',
-    fontFamily: '"Helvetica", sans-serif',
     padding: '14px 34px',
     borderRadius: '3px',
     cursor: 'pointer',
-    fontSize: '18px',
+    fontSize: FONTS.button,
     fontWeight: 'bold',
     transition: 'all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1)',
     letterSpacing: '0.5px',
   };
 
+  // 按钮样式
+  const buttonStyle = {
+    ...buttonBaseStyle,
+    backgroundColor: COLORS.buttonPrimary,
+  };
+
+  // 按钮悬停样式
   const buttonHoverStyle = {
-    ...buttonStyle,
-    backgroundColor: '#FF8C00',
+    ...buttonBaseStyle,
+    backgroundColor: COLORS.buttonHover,
     opacity: 0.9,
+  };
+
+  // 移动版底部内容区域样式
+  const mobileBottomSectionStyle = {
+    width: '100%',
+    padding: '30px 20px',
+    backgroundColor: COLORS.background,
+    display: 'flex',
+    flexDirection: 'column',
+    position: 'relative',
+    marginTop: '-1px',
   };
 
   // 移动版底部区域样式
@@ -249,8 +309,8 @@ const HeroSection = () => {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    width:'100%',
-    backgroundColor:'#D8CFBC',
+    width: '100%',
+    backgroundColor: COLORS.background,
   };
 
   // 移动版左侧文本区域样式
@@ -261,9 +321,10 @@ const HeroSection = () => {
   // 产品图片样式 (仅在移动设备显示)
   const productImageStyle = {
     height: '154px',
-    width:'162px'
+    width: '162px'
   };
 
+  // 滚动箭头样式
   const scrollArrowStyle = {
     position: 'absolute',
     bottom: '40px',
@@ -276,6 +337,7 @@ const HeroSection = () => {
     willChange: 'transform, opacity',
   };
 
+  // 滚动处理函数
   const handleScrollDown = () => {
     window.scrollTo({
       top: window.innerHeight,

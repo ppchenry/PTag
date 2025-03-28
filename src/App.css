@@ -1,6 +1,124 @@
-
+* {
+  font-family: Helvetica;
+}
 .App {
   text-align: center;
+}
+:root {
+  /* 品牌颜色 */
+  --color-primary: #65A8FB;
+  --color-text: #050505;
+  --color-background: #D8CFBC;
+  --color-background-light: #FCF8F3;
+  --color-text-secondary: #333;
+  --color-button-primary: #FFB60C;
+  --color-button-hover: #FF8C00;
+  --color-input:#969696
+
+  /* 基础颜色 */
+  --color-white: white;
+  --color-black: black;
+
+  /* 阴影 */
+  --shadow-text: 0 2px 4px rgba(0, 0, 0, 0.3);
+  --shadow-subtitle: 0 2px 4px rgba(0, 0, 0, 0.4);
+
+  /* 字体大小 */
+  --font-title-mobile: 32px;
+  --font-title-desktop: 56px;
+  --font-subtitle-mobile: 18px;
+  --font-subtitle-desktop: 34px;
+  --font-button: 18px;
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-base: 16px;
+  --font-size-lg: 21px;
+  --font-size-xl: 28px;
+  --font-size-xxl: 34px;
+
+  /* 通用间距 */
+  --spacing-small: 10px;
+  --spacing-medium: 20px;
+  --spacing-large: 40px;
+}
+
+/* ===== 通用样式类 ===== */
+.full-width {
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  box-sizing: border-box;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+/* 按钮样式 */
+.btn-primary {
+  background-color: var(--color-button-primary);
+  color: var(--color-black);
+  border: none;
+  padding: 14px 34px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: var(--font-button);
+  font-weight: bold;
+  transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+  letter-spacing: 0.5px;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-button-hover);
+  opacity: 0.9;
+}
+
+/* 标题组合样式 */
+.brand-title {
+  font-weight: bold;
+  line-height: 1;
+}
+
+/* 文本淡入动画 */
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s, transform 0.8s;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+/* 输入框字体样式 */
+input::placeholder {
+  color: #969696;
+  font-weight: normal;
+  font-family:Helvetica ;
+  font-size: 21px;
+}
+
+/* 设备响应式媒体查询 */
+@media (min-width: 768px) {
+
+  /* 平板和桌面样式 */
+  .mobile-only {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
+
+  /* 移动端样式 */
+  .desktop-only {
+    display: none;
+  }
 }
 
 .App-logo {

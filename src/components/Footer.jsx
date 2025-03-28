@@ -16,18 +16,19 @@ const Footer = () => {
       margin: '0 auto',
       padding: '0 20px',
       boxSizing: 'border-box',
+      
     },
     logo: {
-      fontFamily: 'Helvetica',
-      fontSize: '28px',
+      
+      fontSize: 'var(--font-size-xl)',
       fontWeight: 'bold',
-      color: '#000',
+      color: 'var(--color-text)',
       textAlign: 'center',
       margin: '0 0 20px 0',
     },
     linkList: {
-      fontFamily:'Helvetica',
-      color:'#050505',
+      
+      color:'var(--color-text)',
       fontWeight:'normal',
       display: 'flex',
       justifyContent: 'center',
@@ -40,9 +41,9 @@ const Footer = () => {
       margin: '5px 12px',
     },
     link: {
-      color: '#333',
+      color: 'var(--color-text)',
       textDecoration: 'none',
-      fontSize: '14px',
+      fontSize: 'var(--font-size-sm)',
     },
     copyright: {
       fontSize: '13px',
@@ -60,7 +61,7 @@ const Footer = () => {
       listStyle: 'none',
     },
     iconLink: {
-      color: '#000',
+      
       textDecoration: 'none',
       display: 'block',
     },
@@ -90,14 +91,14 @@ const Footer = () => {
 
   // 链接数据
   const mobileLinks = [
-    { text: '會員登入', url: '#' },
+    { text: '會員登入', url: '/login' },
     { text: '會員注冊', url: '#' },
     { text: '私隱聲明', url: '#' },
     { text: '服務條款', url: '#' },
   ];
 
   const desktopLinks = [
-    { text: '會員登入', url: '#' },
+    { text: '會員登入', url: '/login' },
     { text: '會員注冊', url: '#' },
     { text: '私隱聲明', url: '#' },
     { text: '服務條款', url: '#' },

@@ -81,7 +81,7 @@ const ProductSelection = () => {
     }),
     imageContainer: (isHovered) => ({
       width: isMobile ? '150px' : '200px', // 移动端使用更小的尺寸
-      height: isMobile ? '150px' : '200px', // 移动端使用更小的尺寸
+      height: isMobile ? '150px' : '200px', // 同上
       marginBottom: isMobile ? '15px' : '25px', // 减少移动端的底部边距
       aspectRatio: '1 / 1',
       borderRadius: '50%',

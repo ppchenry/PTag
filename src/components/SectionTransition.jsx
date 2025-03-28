@@ -1,4 +1,4 @@
-// src/components/SectionTransition.jsx
+//预留的loading特效组件
 import React from 'react';
 
 const SectionTransition = ({ type = 'wave', fromColor = '#ffffff', toColor = '#f5f5f5' }) => {

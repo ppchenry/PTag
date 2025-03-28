@@ -1,143 +1,167 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
-
 const Landing = () => {
     const [petTagNumber, setPetTagNumber] = useState('');
+    const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
+
+    // 监听窗口大小变化
+    useEffect(() => {
+        const handleResize = () => {
+            setWindowWidth(window.innerWidth);
+        };
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // 这里添加提交逻辑
+        // 这里添加提交逻辑（还没有）
         console.log('提交的宠物牌号码:', petTagNumber);
     };
 
-    
+    // 响应式布局断点
+    const isMobile = windowWidth < 768;
+    const isTablet = windowWidth >= 768 && windowWidth < 1024;
+
+    // 普通版
+    const ContainerStyle = {
+        width: '100vw',
+        height: '100vh',
+        position: 'relative',
+        overflow: 'hidden',
+        marginTop: '-77px',
+        paddingTop: '77px',
+        marginLeft: '0',  
+        marginRight: '0',
+        boxSizing: 'border-box',
+    };
+
+    const dogImageStyle = {
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover',
+        objectPosition: 'center center',
+        display: 'block',
+        transition: 'transform 0.2s linear',
+        willChange: 'transform',
+    };
+
+    const formContainerStyle = {
+        position: 'absolute',
+        top: '50%',
+        left: isMobile ? '50%' : isTablet ? '25%' : '15%',
+        transform: isMobile ? 'translate(-50%, -50%)' : 'translateY(-50%)',
+        width: isMobile ? '90%' : isTablet ? '450px' : '449px',
+        height: 'auto',
+        padding: '20px',
+        zIndex: 10,
+    };
+
+    const formHeaderStyle = {
+        fontSize: isMobile ? 'calc(var(--font-subtitle-desktop) * 0.8)' : 'var(--font-subtitle-desktop)',
+        color: 'var(--color-black)',
+        marginBottom: isMobile ? '20px' : '30px',
+    };
+
+    const formGroupStyle = {
+        marginBottom: '20px',
+    };
+
+    const labelStyle = {
+        display: 'block',
+        marginBottom: isMobile ? '12px' : '16px',
+        fontSize: 'var(--font-size-lg)',
+        color: 'var(--color-black)',
+    };
+
+    const inputStyle = {
+        width: '100%',
+        padding: isMobile ? '10px' : '12px',
+        border: '1px solid #ddd',
+        borderRadius: '3px',
+        fontSize: 'var(--font-size-lg)',
+        boxSizing: 'border-box',
+    };
+
+    const buttonContainerStyle = {
+        display: 'flex',
+        flexDirection: isMobile ? 'column' : 'row',
+        gap: '10px',
+        marginTop: isMobile ? '20px' : '30px',
+    };
+
+    const primaryButtonStyle = {
+        backgroundColor: 'var(--color-button-primary)',
+        color: 'var(--color-black)',
+        border: 'none',
+        padding: '12px 24px',
+        fontSize: 'var(--font-size-base)',
+        fontWeight: 'bold',
+        borderRadius: '3px',
+        cursor: 'pointer',
+        width: isMobile ? '100%' : 'auto',
+    };
+
+    const secondaryButtonStyle = {
+        backgroundColor: 'transparent',
+        color: '#969696',
+        border: 'none',
+        padding: '12px 24px',
+        fontSize: 'var(--font-size-base)',
+        cursor: 'pointer',
+        width: isMobile ? '100%' : 'auto',
+        textAlign: isMobile ? 'center' : 'left',
+    };
+
+    const linkStyle = {
+        display: 'block',
+        marginTop: '20px',
+        color: 'var(--color-primary)',
+        fontSize: 'var(--font-size-xs)',
+        textDecoration: 'underline',
+    };
 
     return (
         <div >
             <Navbar />
-            <div style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                minHeight: '100vh',
-                width:'100vw',
-                backgroundColor: '#f5f5f5',
-                padding: '20px'
-            }}>
-                <div style={{
-                    display: 'flex',
-                    maxWidth: '1200px',
-                    width: '100%',
-                    backgroundColor: 'white',
-                    borderRadius: '8px',
-                    overflow: 'hidden',
-                    boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)'
-                }}>
-                    {/* 左侧内容面板 */}
-                    <div style={{
-                        flex: '1',
-                        padding: '40px',
-                        display: 'flex',
-                        flexDirection: 'column'
-                    }}>
-                        <h1 style={{
-                            fontSize: '28px',
-                            marginBottom: '5px',
-                            fontWeight: '600'
-                        }}>查閱或啟用</h1>
+            <section style={ContainerStyle}>
+                <img
+                    src="/atlas/tagId.png"
+                    alt="登记你的tagId"
+                    style={dogImageStyle}
+                    loading="eager"
+                />
 
-                        <h2 style={{
-                            fontSize: '36px',
-                            marginTop: '0',
-                            marginBottom: '30px',
-                            fontWeight: 'bold'
-                        }}>PTag 寵物牌</h2>
+                <div style={formContainerStyle}>
+                    <h1 style={formHeaderStyle}>查閱或啟用<br /> PTag 寵物牌</h1>
 
-                        <div style={{ marginTop: '20px' }}>
-                            <p style={{
-                                fontSize: '16px',
-                                marginBottom: '10px',
-                                color: '#333'
-                            }}>寵物牌上號碼</p>
-
+                    <form onSubmit={handleSubmit}>
+                        <div style={formGroupStyle}>
+                            <label style={labelStyle} htmlFor="petTag">寵物牌上號碼</label>
                             <input
+                                style={inputStyle}
                                 type="text"
+                                id="petTag"
+                                placeholder="寵物牌上號碼"
                                 value={petTagNumber}
                                 onChange={(e) => setPetTagNumber(e.target.value)}
-                                placeholder="寵物牌上號碼"
-                                style={{
-                                    width: '100%',
-                                    padding: '12px',
-                                    border: '1px solid #ddd',
-                                    borderRadius: '4px',
-                                    marginBottom: '20px',
-                                    fontSize: '16px'
-                                }}
                             />
-
-                            <div style={{
-                                display: 'flex',
-                                gap: '15px',
-                                marginBottom: '20px'
-                            }}>
-                                <button
-                                    onClick={handleSubmit}
-                                    style={{
-                                        padding: '10px 25px',
-                                        backgroundColor: '#FFA500',
-                                        color: 'white',
-                                        border: 'none',
-                                        borderRadius: '4px',
-                                        cursor: 'pointer',
-                                        fontWeight: 'bold',
-                                        fontSize: '16px'
-                                    }}
-                                >確認</button>
-
-                                <button
-                                    style={{
-                                        padding: '10px 25px',
-                                        backgroundColor: 'transparent',
-                                        color: '#333',
-                                        border: 'none',
-                                        cursor: 'pointer',
-                                        fontSize: '16px'
-                                    }}
-                                >取消</button>
-                            </div>
-
-                            <p style={{
-                                color: '#0066cc',
-                                fontSize: '14px',
-                                cursor: 'pointer',
-                                marginTop: '20px'
-                            }}>PTag寵物牌使用手冊</p>
                         </div>
-                    </div>
 
-                    {/* 右侧图片面板 */}
-                    <div style={{
-                        flex: '1.5',
-                        overflow: 'hidden'
-                    }}>
-                        <img
-                            src="/atlas/tagId.png"
-                            alt="宠物狗"
-                            style={{
-                                width: '100%',
-                                height: '100%',
-                                objectFit: 'cover'
-                            }}
-                        />
-                    </div>
+                        <div style={buttonContainerStyle}>
+                            <button style={primaryButtonStyle} type="submit">確認</button>
+                            <button style={secondaryButtonStyle} type="button">取消</button>
+                        </div>
+                    </form>
+
+                    <a href="#" style={linkStyle}>PTag寵物牌使用手冊</a>
                 </div>
-            </div>
-            
+            </section>
 
             <Footer />
-            
         </div>
     );
 };

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import '../fonts.css';
 
 const Navbar = () => {
@@ -12,6 +13,8 @@ const Navbar = () => {
   const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 0);
   const [hoveredNav, setHoveredNav] = useState(null);
   const [isScrolled, setIsScrolled] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleResize = () => {
@@ -86,17 +89,17 @@ const Navbar = () => {
   };
 
   const logoStyle = {
-    fontFamily: 'Helvetica',
+    
     fontWeight: 'bold',
     fontSize: '36px',
     lineHeight: '100%',
-    color: '#000000',
+    color: 'var(--color-text)',
     textDecoration: 'none',
     textShadow: '0 1px 2px rgba(255, 255, 255, 0.5)',
   };
 
   const navLinksContainerStyle = {
-    fontFamily: 'Helvetica',
+    color: 'var(--color-text)',
     fontWeight:'normal',
     display: 'flex',
     alignItems: 'center',
@@ -112,12 +115,12 @@ const Navbar = () => {
       color: isHovered ? '#4a90e2' : '#000000',
       fontFamily: 'Helvetica',
       fontWeight: isHovered ? 500 : 400,
-      fontSize: '16px',
+      fontSize: 'var(--font-size-base)',
       whiteSpace: 'nowrap',
       padding: '8px 12px',
       cursor: 'pointer',
       transition: 'all 0.2s ease',
-      borderRadius: '4px',
+      borderRadius: '3px',
       backgroundColor: isHovered ? 'rgba(240, 247, 255, 0.8)' : 'transparent',
       transform: isHovered ? 'translateY(-2px)' : 'translateY(0)',
       boxShadow: isHovered ? '0 2px 4px rgba(0, 0, 0, 0.1)' : 'none',
@@ -151,10 +154,24 @@ const Navbar = () => {
 
   // 处理导航项点击
   const handleNavClick = (name) => {
+    // 关闭移动端菜单（如果打开）
+    if (isMenuOpen) {
+      setIsMenuOpen(false);
+    }
+
     if (name === 'features') {
+      // 特点是内部链接，使用滚动
       scrollToSection('majorFunction');
-    } else {
-      console.log(`Clicked: ${name}`);
+    } else if (name === 'shop') {
+      // 使用navigate导航到商店(待做)页面
+      navigate('/shop');
+    } else if (name === 'member') {
+      // 使用navigate导航到会员登录页面
+      navigate('/login');
+    } else if (name === 'language') {
+      // 语言切换逻辑
+      console.log('Language toggle');
+      
     }
   };
 
@@ -205,14 +222,14 @@ const Navbar = () => {
             <div style={navLinksContainerStyle}>
               {renderNavItem('features', '特點')}
               {renderNavItem('shop', '選購PTag')}
-              {renderNavItem('member', '會員專區')}
+              {renderNavItem('member', '會員專區', '/login')}
               {renderNavItem('language', '繁/EN')}
             </div>
           ) : (
             <div style={mobileNavLinksStyle}>
               {renderNavItem('features', '特點')}
               {renderNavItem('shop', '選購PTag')}
-              {renderNavItem('member', '會員專區')}
+                {renderNavItem('member', '會員專區', '/login')}
               {renderNavItem('language', '繁/EN')}
             </div>
           )}

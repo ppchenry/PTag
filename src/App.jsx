@@ -3,8 +3,10 @@ import React from 'react';
 import Home from './pages/Home';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Landing from './pages/Landing';
+import Login from './pages/Login';
 import { Helmet } from 'react-helmet';
 import './fonts.css';
+import './App.css';
 
 const App = () => {
   return (
@@ -28,6 +30,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/landing" element={<Landing />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
       </BrowserRouter>
     </div>
