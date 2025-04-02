@@ -13,7 +13,7 @@
   --color-text-secondary: #333;
   --color-button-primary: #FFB60C;
   --color-button-hover: #FF8C00;
-  --color-input:#969696
+  
 
   /* 基础颜色 */
   --color-white: white;
@@ -28,7 +28,7 @@
   --font-title-desktop: 56px;
   --font-subtitle-mobile: 18px;
   --font-subtitle-desktop: 34px;
-  --font-button: 18px;
+  --font-button: 16px;
   --font-size-xs: 12px;
   --font-size-sm: 14px;
   --font-size-base: 16px;
@@ -36,12 +36,19 @@
   --font-size-xl: 28px;
   --font-size-xxl: 34px;
 
+
+ 
+
   /* 通用间距 */
   --spacing-small: 10px;
   --spacing-medium: 20px;
   --spacing-large: 40px;
 }
 
+
+ 
+
+ 
 /* ===== 通用样式类 ===== */
 .full-width {
   width: 100vw;
@@ -65,7 +72,7 @@
   background-color: var(--color-button-primary);
   color: var(--color-black);
   border: none;
-  padding: 14px 34px;
+  padding: 14px 23px;
   border-radius: 3px;
   cursor: pointer;
   font-size: var(--font-button);
@@ -97,11 +104,15 @@
   transform: translateY(0);
 }
 /* 输入框字体样式 */
-input::placeholder {
+.input {
+  font-size: 16px;
+  font-family: Helvetica;
+}
+.input::placeholder {
   color: #969696;
   font-weight: normal;
   font-family:Helvetica ;
-  font-size: 21px;
+  font-size: 16px ;
 }
 
 /* 设备响应式媒体查询 */

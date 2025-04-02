@@ -271,10 +271,10 @@ const HeroSection = () => {
   const buttonBaseStyle = {
     color: COLORS.black,
     border: 'none',
-    padding: '14px 34px',
+    padding: '14px 23px',
     borderRadius: '3px',
     cursor: 'pointer',
-    fontSize: FONTS.button,
+    fontSize: 'var(--font-size-base)',
     fontWeight: 'bold',
     transition: 'all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1)',
     letterSpacing: '0.5px',

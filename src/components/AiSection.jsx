@@ -152,7 +152,7 @@ const AiSection = () => {
       titleStyle: {
         fontSize: isTablet ? 'var(--font-size-xl)' : 'var(--font-size-xxl)',
         fontWeight: 'bold',
-        color: 'var(--color-white)',
+        color: 'white',
         marginBottom: '0',
         maxWidth: '600px',
         textShadow: 'var(--shadow-text)',
@@ -166,7 +166,7 @@ const AiSection = () => {
         fontSize: isTablet ? 'var(--font-size-base)' : 'var(--font-size-lg)',
         fontWeight: '400',
         lineHeight: 1.2,
-        color: 'var(--color-white)',
+        color: 'white',
         marginBottom: '5px',
         textShadow: 'var(--shadow-subtitle)',
         letterSpacing: '0px',
