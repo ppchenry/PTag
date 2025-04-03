@@ -4,10 +4,25 @@ import Footer from '../components/Footer';
 import { login, register, forgotPassword, parseResponse } from '../services/api';
 import { validateRegisterForm } from '../utils/validation';
 
-const Login = () => {
-    const [activeTab, setActiveTab] = useState('login');
+const Login = ({initialTab}) => {
+    const [activeTab, setActiveTab] = useState(initialTab ||'login');
     const [passwordVisible, setPasswordVisible] = useState(false);
     const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+
+
+    // 添加表单错误状态
+    const [formErrors, setFormErrors] = useState({});
+
+    // 添加错误提示样式
+    const errorMessageStyle = {
+        color: '#F10000',
+        fontSize: '14px',
+        marginTop: '-15px',
+        marginBottom: '10px',
+        display: 'block'
+    };
+
+   
 
     // 表单状态
     const [loginData, setLoginData] = useState({ username: '', password: '' });
@@ -25,6 +40,7 @@ const Login = () => {
     const handleLogin = async (e) => {
         e.preventDefault();
         setMessage('');
+        
 
         try {
             const response = await login(loginData.username, loginData.password);
@@ -44,11 +60,12 @@ const Login = () => {
     const handleRegister = async (e) => {
         e.preventDefault();
         setMessage('');
+        setFormErrors({});
 
         // 使用验证服务
         const validation = validateRegisterForm(registerData);
         if (!validation.isValid) {
-            setMessage(Object.values(validation.errors)[0]);
+            setFormErrors(validation.errors);
             return;
         }
 
@@ -81,18 +98,24 @@ const Login = () => {
         }
     };
 
-    // 样式（保留原有样式定义）
-    const containerStyle = {
-        width: '100vw',
-        height: '100vh',
-        position: 'relative',
-        overflow: 'hidden',
-        marginTop: '-77px',
-        paddingTop: '77px',
-        marginLeft: 'calc(-50vw + 50%)',
-        boxSizing: 'border-box',
+    // 使用与Home页面相同的页面布局结构
+    const pageStyle = {
+        display: 'flex',
+        flexDirection: 'column',
+        minHeight: '100vh',
+        
     };
 
+    const contentStyle = {
+        flex: '1 0 auto',
+        position: 'relative',
+        width:"100%",
+        marginTop: '-77px',
+        paddingTop: '77px',
+        
+    };
+
+    
     const catImageStyle = {
         width: '100%',
         height: '100%',
@@ -101,6 +124,10 @@ const Login = () => {
         display: 'block',
         transition: 'transform 0.2s linear',
         willChange: 'transform',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        zIndex: 0
     };
 
     const formContainerStyle = {
@@ -113,6 +140,7 @@ const Login = () => {
         borderRadius: '10px',
         padding: '30px 40px',
         boxShadow: '0 5px 15px rgba(0, 0, 0, 0.1)',
+        zIndex: 1
     };
 
     const formTitleStyle = {
@@ -146,7 +174,6 @@ const Login = () => {
         marginBottom: '20px',
         border: '1px solid #e0e0e0',
         borderRadius: '4px',
-        
         boxSizing: 'border-box',
     };
 
@@ -240,7 +267,6 @@ const Login = () => {
                 <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
         ) : (
-            
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12C23 12 19 20 12 20C5 20 1 12 1 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -270,6 +296,7 @@ const Login = () => {
                     onChange={(e) => setLoginData({ ...loginData, username: e.target.value })}
                     required
                 />
+                
 
                 <label style={labelStyle}>密碼</label>
                 <div style={passwordInputContainerStyle}>
@@ -324,6 +351,7 @@ const Login = () => {
                     onChange={(e) => setRegisterData({ ...registerData, Last_name: e.target.value })}
                     required
                 />
+                {formErrors.Last_name && <span style={errorMessageStyle}>{formErrors.Last_name}</span>}
 
                 <label style={labelStyle}>電郵</label>
                 <input
@@ -335,6 +363,7 @@ const Login = () => {
                     onChange={(e) => setLoginData({ ...loginData, username: e.target.value })}
                     required
                 />
+                {formErrors.emailsignup && <span style={errorMessageStyle}>{formErrors.emailsignup}</span>}
 
                 <label style={labelStyle}>設定密碼</label>
                 <div style={passwordInputContainerStyle}>
@@ -354,6 +383,7 @@ const Login = () => {
                         <EyeIcon visible={passwordVisible} />
                     </div>
                 </div>
+                {formErrors.passwordsignup && <span style={errorMessageStyle}>{formErrors.passwordsignup}</span>}
 
                 <label style={labelStyle}>確認密碼</label>
                 <div style={passwordInputContainerStyle}>
@@ -373,23 +403,25 @@ const Login = () => {
                         <EyeIcon visible={confirmPasswordVisible} />
                     </div>
                 </div>
+                {formErrors.passwordsignup_confirm && <span style={errorMessageStyle}>{formErrors.passwordsignup_confirm}</span>}
 
                 <label style={checkboxLabelStyle}>
                     <input
                         type="checkbox"
                         style={{ marginRight: '8px' }}
-                        
                         checked={registerData.agreepolicy}
                         onChange={(e) => setRegisterData({ ...registerData, agreepolicy: e.target.checked })}
                     />
                     同意服務條款及私隱聲明
                 </label>
+                {formErrors.agreepolicy && <span style={errorMessageStyle}>{formErrors.agreepolicy}</span>}
 
                 <button type="submit" style={buttonStyle}>註冊</button>
 
                 <p style={termsStyle}>
                     註冊即表示您已閱讀並同意 <span style={termsLinkStyle}>服務條款</span> 及 <span style={termsLinkStyle}>私隱聲明</span>
                 </p>
+                
             </form>
         </>
     );
@@ -433,19 +465,24 @@ const Login = () => {
     };
 
     return (
-        <div>
+        <div style={pageStyle}>
             <Navbar />
-            <section style={containerStyle} className="full-width">
-                <img
-                    src="/atlas/cat.png"
-                    alt="登录注册猫"
-                    style={catImageStyle}
-                    loading="eager"
-                />
-                <div style={formContainerStyle}>
-                    {renderActiveForm()}
+
+            <div style={contentStyle}>
+                
+                <div style={{ position: 'relative', height: '100vh' }}>
+                    <img
+                        src="/atlas/cat.png"
+                        alt="登录注册猫"
+                        style={catImageStyle}
+                        loading="eager"
+                    />
+                    <div style={formContainerStyle}>
+                        {renderActiveForm()}
+                    </div>
                 </div>
-            </section>
+            </div>
+
             <Footer />
         </div>
     );

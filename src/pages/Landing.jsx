@@ -1,10 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import { useNavigate } from 'react-router-dom';
 
 const Landing = () => {
     const [petTagNumber, setPetTagNumber] = useState('');
     const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
+    const [showHelpImage, setShowHelpImage] = useState(false); // 控制帮助图片的显示
+    const helpImageRef = useRef(null); // 用于检测点击外部区域
+    const navigate = useNavigate();
 
     // 监听窗口大小变化
     useEffect(() => {
@@ -16,10 +20,39 @@ const Landing = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
+    // 添加点击外部关闭图片的逻辑
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (helpImageRef.current && !helpImageRef.current.contains(event.target)) {
+                setShowHelpImage(false);
+            }
+        };
+
+        // 只有当图片显示时才添加事件监听
+        if (showHelpImage) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [showHelpImage]);
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        // 这里添加提交逻辑（还没有）
-        console.log('提交的宠物牌号码:', petTagNumber);
+        if (!petTagNumber.trim()) {
+            alert('请输入宠物牌号码');
+            return;
+        }
+
+        // 跳转到宠物位置地图页面，携带宠物牌号码作为查询参数
+        navigate(`/pet-location?qr=${petTagNumber.trim()}`);
+    };
+
+    // 处理图标点击
+    const handleInfoClick = (e) => {
+        e.stopPropagation(); // 阻止事件冒泡
+        setShowHelpImage(!showHelpImage);
     };
 
     // 响应式布局断点
@@ -27,14 +60,20 @@ const Landing = () => {
     const isTablet = windowWidth >= 768 && windowWidth < 1024;
 
     // 普通版
+    const pageStyle = {
+        display: 'flex',
+        flexDirection: 'column',
+        minHeight: '100vh',
+    };
+
     const ContainerStyle = {
         width: '100vw',
-        height: '100vh',
+        height: isMobile ? 'calc(100vh - 77px)' : '100vh', // 在移动端减去navbar高度
         position: 'relative',
         overflow: 'hidden',
         marginTop: '-77px',
         paddingTop: '77px',
-        marginLeft: '0',  
+        marginLeft: '0',
         marginRight: '0',
         boxSizing: 'border-box',
     };
@@ -43,7 +82,7 @@ const Landing = () => {
         width: '100%',
         height: '100%',
         objectFit: 'cover',
-        objectPosition: 'center center',
+        objectPosition: isMobile ?'75% center':'center center',
         display: 'block',
         transition: 'transform 0.2s linear',
         willChange: 'transform',
@@ -51,38 +90,77 @@ const Landing = () => {
 
     const formContainerStyle = {
         position: 'absolute',
-        top: '50%',
+        top: isMobile ? '50%' : '50%',
         left: isMobile ? '50%' : isTablet ? '25%' : '15%',
         transform: isMobile ? 'translate(-50%, -50%)' : 'translateY(-50%)',
-        width: isMobile ? '90%' : isTablet ? '450px' : '449px',
+        width: isMobile ? '85%' : isTablet ? '450px' : '449px',
         height: 'auto',
-        padding: '20px',
+        padding: isMobile ? '25px 20px' : '20px',
         zIndex: 10,
+        backgroundColor: isMobile ? '#FCF8F3CC' : 'transparent', // 移动端添加半透明背景
+        borderRadius: isMobile ? '10px' : '0',
+        boxShadow: isMobile ? '0 2px 10px rgba(0,0,0,0.1)' : 'none',
     };
 
     const formHeaderStyle = {
-        fontSize: isMobile ? 'calc(var(--font-subtitle-desktop) * 0.8)' : 'var(--font-subtitle-desktop)',
+        fontSize: isMobile ? '26px' : 'var(--font-subtitle-desktop)',
         color: 'var(--color-black)',
         marginBottom: isMobile ? '20px' : '30px',
+        textAlign: isMobile ? 'center' : 'left',
+        fontWeight: 'bold',
     };
 
     const formGroupStyle = {
         marginBottom: '20px',
+        position: 'relative', // 为帮助图片定位
     };
 
-    const labelStyle = {
-        display: 'block',
+    // 标签容器样式，用于将标签和图标并排放置
+    const labelContainerStyle = {
+        display: 'flex',
+        alignItems: 'center',
         marginBottom: isMobile ? '12px' : '16px',
-        fontSize: 'var(--font-size-lg)',
+    };
+
+    // 标签文本样式
+    const labelTextStyle = {
+        fontSize: isMobile ? "13px" : 'var(--font-size-lg)',
         color: 'var(--color-black)',
+        lineHeight: '24px',
+        margin: 0,
+    };
+
+    // 图标样式
+    const iconStyle = {
+        width: isMobile ? "13px" : '20px',
+        height: isMobile ? "13px" : '20px',
+        marginLeft: '8px',
+        cursor: 'pointer',
+        verticalAlign: 'middle',
+    };
+
+    // 帮助图片样式
+    const helpImageStyle = {
+        position: 'absolute',
+        top: isMobile ? '-160px' : '-200px', // 将图片移动到上方
+        left: isMobile ? '54%' : '56%', // 水平居中
+        transform: 'translateX(-50%)', // 确保居中对齐
+        maxWidth: '300px', // 根据实际图片调整宽度
+        boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
+        zIndex: 100,
+        border: '1px solid #ddd',
+        borderRadius: '4px',
+        backgroundColor: '#fff',
+        padding: '5px',
+        display: showHelpImage ? 'block' : 'none',
     };
 
     const inputStyle = {
         width: '100%',
-        padding: isMobile ? '10px' : '12px',
+        padding: isMobile ? '12px' : '12px',
         border: '1px solid #ddd',
         borderRadius: '3px',
-        fontSize: 'var(--font-size-lg)',
+        fontSize: isMobile ? '12px' : 'var(--font-size-lg)',
         boxSizing: 'border-box',
     };
 
@@ -90,14 +168,14 @@ const Landing = () => {
         display: 'flex',
         flexDirection: isMobile ? 'column' : 'row',
         gap: '10px',
-        marginTop: isMobile ? '20px' : '30px',
+        marginTop: isMobile ? '15px' : '30px', // 在移动端减少上边距，为链接腾出空间
     };
 
     const primaryButtonStyle = {
         backgroundColor: 'var(--color-button-primary)',
         color: 'var(--color-black)',
         border: 'none',
-        padding: '12px 24px',
+        padding: '14px 23px',
         fontSize: 'var(--font-size-base)',
         fontWeight: 'bold',
         borderRadius: '3px',
@@ -105,27 +183,20 @@ const Landing = () => {
         width: isMobile ? '100%' : 'auto',
     };
 
-    const secondaryButtonStyle = {
-        backgroundColor: 'transparent',
-        color: '#969696',
-        border: 'none',
-        padding: '12px 24px',
-        fontSize: 'var(--font-size-base)',
-        cursor: 'pointer',
-        width: isMobile ? '100%' : 'auto',
-        textAlign: isMobile ? 'center' : 'left',
-    };
+    
 
     const linkStyle = {
         display: 'block',
-        marginTop: '20px',
+        marginTop: isMobile ? '20px' : '20px', // 移动端和桌面端的上边距
+        marginBottom: isMobile ? '15px' : '0', // 移动端添加下边距
         color: 'var(--color-primary)',
         fontSize: 'var(--font-size-xs)',
         textDecoration: 'underline',
+        textAlign: isMobile ? 'center' : 'left',
     };
 
     return (
-        <div >
+        <div style={pageStyle}>
             <Navbar />
             <section style={ContainerStyle}>
                 <img
@@ -136,11 +207,38 @@ const Landing = () => {
                 />
 
                 <div style={formContainerStyle}>
-                    <h1 style={formHeaderStyle}>查閱或啟用<br /> PTag 寵物牌</h1>
+                    <h1 style={formHeaderStyle}>
+                        {isMobile ? "查閱或啟用 PTag 寵物牌" : (
+                            <>查閱或啟用PTag 寵物牌</>
+                        )}
+                    </h1>
 
                     <form onSubmit={handleSubmit}>
                         <div style={formGroupStyle}>
-                            <label style={labelStyle} htmlFor="petTag">寵物牌上號碼</label>
+                            <div style={labelContainerStyle}>
+                                <label style={labelTextStyle} htmlFor="petTag">寵物牌上號碼</label>
+                                <img
+                                    src="/icons/number.png"
+                                    alt="更多信息"
+                                    style={iconStyle}
+                                    onClick={handleInfoClick}
+                                    title="点击查看帮助图片"
+                                />
+
+                                {/* 帮助图片，点击感叹号时显示 */}
+                                {showHelpImage && (
+                                    <div
+                                        ref={helpImageRef}
+                                        style={helpImageStyle}
+                                    >
+                                        <img
+                                            src="/icons/numberPosition.png"
+                                            alt="宠物牌号码位置示例"
+                                            style={{ width: '100%' }}
+                                        />
+                                    </div>
+                                )}
+                            </div>
                             <input
                                 style={inputStyle}
                                 type="text"
@@ -151,13 +249,23 @@ const Landing = () => {
                             />
                         </div>
 
+                        {/* 移动端在按钮上方显示链接 */}
+                        {isMobile && (
+                            <div style={{ textAlign: 'center' }}>
+                                <a href="#" style={linkStyle}>PTag寵物牌使用手冊</a>
+                            </div>
+                        )}
+
                         <div style={buttonContainerStyle}>
                             <button style={primaryButtonStyle} type="submit">確認</button>
-                            <button style={secondaryButtonStyle} type="button">取消</button>
+                            
                         </div>
-                    </form>
 
-                    <a href="#" style={linkStyle}>PTag寵物牌使用手冊</a>
+                        {/* 桌面端在按钮下方显示链接 */}
+                        {!isMobile && (
+                            <a href="#" style={linkStyle}>PTag寵物牌使用手冊</a>
+                        )}
+                    </form>
                 </div>
             </section>
 

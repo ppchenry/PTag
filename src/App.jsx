@@ -4,9 +4,12 @@ import Home from './pages/Home';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Landing from './pages/Landing';
 import Login from './pages/Login';
+
+
 import { Helmet } from 'react-helmet';
 import './fonts.css';
 import './App.css';
+import PetLocationMap from './pages/PetLocationMap';
 
 const App = () => {
   return (
@@ -31,6 +34,8 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/landing" element={<Landing />} />
           <Route path="/login" element={<Login />} />
+          <Route path='/pet-location' element={<PetLocationMap />} />
+          <Route path="/register" element={<Login initialTab="register" />} />
         </Routes>
       </BrowserRouter>
     </div>
