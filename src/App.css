@@ -110,9 +110,10 @@ html,body {
 }
 /* 输入框字体样式 */
 .input {
-  font-size: 16px;
+  
   font-family: Helvetica;
 }
+
 .input::placeholder {
   color: #969696;
   font-weight: normal;

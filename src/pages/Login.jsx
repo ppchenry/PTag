@@ -1,14 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { login, register, forgotPassword, parseResponse } from '../services/api';
 import { validateRegisterForm } from '../utils/validation';
 
-const Login = ({initialTab}) => {
-    const [activeTab, setActiveTab] = useState(initialTab ||'login');
+const Login = ({ initialTab }) => {
+    const [activeTab, setActiveTab] = useState(initialTab || 'login');
     const [passwordVisible, setPasswordVisible] = useState(false);
     const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
 
+    // 检查屏幕是否为移动尺寸
+    useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth <= 768);
+        };
+
+        // 初始检查
+        checkMobile();
+
+        // 为窗口调整大小添加事件监听器
+        window.addEventListener('resize', checkMobile);
+
+        // 清理
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
 
     // 添加表单错误状态
     const [formErrors, setFormErrors] = useState({});
@@ -21,8 +37,6 @@ const Login = ({initialTab}) => {
         marginBottom: '10px',
         display: 'block'
     };
-
-   
 
     // 表单状态
     const [loginData, setLoginData] = useState({ username: '', password: '' });
@@ -40,7 +54,6 @@ const Login = ({initialTab}) => {
     const handleLogin = async (e) => {
         e.preventDefault();
         setMessage('');
-        
 
         try {
             const response = await login(loginData.username, loginData.password);
@@ -48,7 +61,7 @@ const Login = ({initialTab}) => {
             setMessage(result.message);
 
             if (result.success) {
-                window.location.href = 'https://www.ptag.com.hk/php/home.php';
+                window.location.href = '/';
             }
         } catch (error) {
             console.error('登录请求失败:', error);
@@ -103,19 +116,16 @@ const Login = ({initialTab}) => {
         display: 'flex',
         flexDirection: 'column',
         minHeight: '100vh',
-        
     };
 
     const contentStyle = {
         flex: '1 0 auto',
         position: 'relative',
-        width:"100%",
+        width: "100%",
         marginTop: '-77px',
         paddingTop: '77px',
-        
     };
 
-    
     const catImageStyle = {
         width: '100%',
         height: '100%',
@@ -130,7 +140,8 @@ const Login = ({initialTab}) => {
         zIndex: 0
     };
 
-    const formContainerStyle = {
+    // 桌面版表单容器样式
+    const desktopFormContainerStyle = {
         position: 'absolute',
         top: '50%',
         left: '25%',
@@ -143,18 +154,32 @@ const Login = ({initialTab}) => {
         zIndex: 1
     };
 
+    // 移动版表单容器样式
+    const mobileFormContainerStyle = {
+        width: '80%',
+        maxWidth: '400px',
+        margin: '20px auto',
+        padding: '30px 20px',
+        backgroundColor: '#FCF8F3CC',
+        borderRadius: '10px',
+        boxShadow: '0 5px 15px rgba(0, 0, 0, 0.1)',
+        zIndex: 1
+    };
+
     const formTitleStyle = {
-        fontSize: 'var(--font-size-xxl)',
+        fontSize: isMobile ? '26px' : 'var(--font-size-xxl)',
         fontWeight: 'bold',
         marginBottom: '5px',
         marginTop: '0',
+        textAlign: 'left' ,
     };
 
     const toggleLinkStyle = {
-        fontSize: 'var(--font-size-base)',
+        fontSize: isMobile ?'var(--font-size-xs)':'var(--font-size-base)',
         color: 'var(--color-text)',
         marginBottom: '20px',
         display: 'block',
+        textAlign:  'left',
     };
 
     const toggleLinkSpanStyle = {
@@ -164,7 +189,7 @@ const Login = ({initialTab}) => {
 
     const labelStyle = {
         display: 'block',
-        fontSize: 'var(--font-size-lg)',
+        fontSize: isMobile?'13px':'var(--font-size-lg)',
         marginBottom: '8px',
     };
 
@@ -175,6 +200,8 @@ const Login = ({initialTab}) => {
         border: '1px solid #e0e0e0',
         borderRadius: '4px',
         boxSizing: 'border-box',
+        fontSize:isMobile?'12px':'16px',
+        fontFamily: 'Helvetica'
     };
 
     const passwordInputContainerStyle = {
@@ -194,11 +221,11 @@ const Login = ({initialTab}) => {
     const buttonStyle = {
         width: '100%',
         padding: '12px',
-        backgroundColor: 'var(--color-button-primary)',
+        backgroundColor: isMobile ? '#FFC107' : 'var(--color-button-primary)',
         color: 'var(--color-black)',
         border: 'none',
         borderRadius: '3px',
-        fontSize: 'var(--font-size-base)',
+        fontSize: isMobile ? 'var( --font-size-xs)' : 'var(--font-size-base)',
         fontWeight: 'bold',
         cursor: 'pointer',
         marginTop: '10px',
@@ -209,24 +236,27 @@ const Login = ({initialTab}) => {
         alignItems: 'center',
         justifyContent: 'space-between',
         marginBottom: '20px',
+        flexWrap: isMobile ? 'wrap' : 'nowrap',
     };
 
     const checkboxLabelStyle = {
         display: 'flex',
         alignItems: 'center',
-        fontSize: 'var(--font-size-base)',
+        fontSize: isMobile ?'var( --font-size-xs)':'var(--font-size-base)',
         color: 'var(--color-text)',
         cursor: 'pointer',
+        marginBottom: isMobile ? '10px' : '0',
+        width: 'auto',
     };
 
     const forgotPasswordStyle = {
-        fontSize: 'var(--font-size-base)',
+        fontSize: isMobile ? 'var( --font-size-xs)' : 'var(--font-size-base)',
         color: 'var(--color-text)',
         cursor: 'pointer',
     };
 
     const termsStyle = {
-        fontSize: '13px',
+        fontSize: isMobile?'12px':'13px',
         color: 'var(--color-text)',
         marginTop: '20px',
         textAlign: 'center',
@@ -240,7 +270,7 @@ const Login = ({initialTab}) => {
     const backButtonStyle = {
         display: 'flex',
         alignItems: 'center',
-        fontSize: 'var(--font-size-xxl)',
+        fontSize: isMobile?'26px':'var(--font-size-xxl)',
         fontWeight: 'bold',
         marginBottom: '20px',
         cursor: 'pointer',
@@ -251,6 +281,26 @@ const Login = ({initialTab}) => {
         marginBottom: '15px',
         fontSize: 'var(--font-size-base)',
         textAlign: 'center',
+    };
+
+    // 移动版特定样式
+    const mobileBgStyle = {
+        backgroundImage: 'url("/atlas/cat.png")',
+        backgroundSize: 'cover',
+        backgroundPosition: '70% center',
+        minHeight: '100vh',
+        paddingTop: '40px',
+        paddingBottom: '20px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center'
+    };
+
+    const mobileLogoStyle = {
+        fontSize: '32px',
+        fontWeight: 'bold',
+        marginBottom: '20px',
+        textAlign: 'center'
     };
 
     // SVG图标组件
@@ -291,19 +341,18 @@ const Login = ({initialTab}) => {
                     type="email"
                     placeholder="example@mail.com"
                     style={inputStyle}
-                    className="input"
+                    
                     value={loginData.username}
                     onChange={(e) => setLoginData({ ...loginData, username: e.target.value })}
                     required
                 />
-                
 
                 <label style={labelStyle}>密碼</label>
                 <div style={passwordInputContainerStyle}>
                     <input
                         type={passwordVisible ? "text" : "password"}
                         placeholder="8-12位混用大小寫字母和數字密碼"
-                        className="input"
+                        
                         style={{ ...inputStyle, marginBottom: 0 }}
                         value={loginData.password}
                         onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
@@ -345,7 +394,7 @@ const Login = ({initialTab}) => {
                 <input
                     type="text"
                     placeholder="稱呼"
-                    className="input"
+                   
                     style={inputStyle}
                     value={registerData.Last_name}
                     onChange={(e) => setRegisterData({ ...registerData, Last_name: e.target.value })}
@@ -358,9 +407,9 @@ const Login = ({initialTab}) => {
                     type="email"
                     placeholder="example@mail.com"
                     style={inputStyle}
-                    className="input"
-                    value={loginData.username}
-                    onChange={(e) => setLoginData({ ...loginData, username: e.target.value })}
+                    
+                    value={registerData.emailsignup}
+                    onChange={(e) => setRegisterData({ ...registerData, emailsignup: e.target.value })}
                     required
                 />
                 {formErrors.emailsignup && <span style={errorMessageStyle}>{formErrors.emailsignup}</span>}
@@ -370,7 +419,7 @@ const Login = ({initialTab}) => {
                     <input
                         type={passwordVisible ? "text" : "password"}
                         placeholder="8-12位混用大小寫字母和數字密碼"
-                        className="input"
+                        
                         style={{ ...inputStyle, marginBottom: 0 }}
                         value={registerData.passwordsignup}
                         onChange={(e) => setRegisterData({ ...registerData, passwordsignup: e.target.value })}
@@ -390,7 +439,7 @@ const Login = ({initialTab}) => {
                     <input
                         type={confirmPasswordVisible ? "text" : "password"}
                         placeholder="再次輸入密碼"
-                        className="input"
+                        
                         style={{ ...inputStyle, marginBottom: 0 }}
                         value={registerData.passwordsignup_confirm}
                         onChange={(e) => setRegisterData({ ...registerData, passwordsignup_confirm: e.target.value })}
@@ -421,7 +470,7 @@ const Login = ({initialTab}) => {
                 <p style={termsStyle}>
                     註冊即表示您已閱讀並同意 <span style={termsLinkStyle}>服務條款</span> 及 <span style={termsLinkStyle}>私隱聲明</span>
                 </p>
-                
+
             </form>
         </>
     );
@@ -440,7 +489,7 @@ const Login = ({initialTab}) => {
                 <input
                     type="email"
                     placeholder="example@mail.com"
-                    className="input"
+                    
                     style={inputStyle}
                     value={forgotData.username}
                     onChange={(e) => setForgotData({ ...forgotData, username: e.target.value })}
@@ -466,24 +515,40 @@ const Login = ({initialTab}) => {
 
     return (
         <div style={pageStyle}>
-            <Navbar />
-
-            <div style={contentStyle}>
-                
-                <div style={{ position: 'relative', height: '100vh' }}>
-                    <img
-                        src="/atlas/cat.png"
-                        alt="登录注册猫"
-                        style={catImageStyle}
-                        loading="eager"
-                    />
-                    <div style={formContainerStyle}>
-                        {renderActiveForm()}
+            {!isMobile ? (
+                // 桌面版布局
+                <>
+                    <Navbar />
+                    <div style={contentStyle}>
+                        <div style={{ position: 'relative', height: '100vh' }}>
+                            <img
+                                src="/atlas/cat.png"
+                                alt="登录注册猫"
+                                style={catImageStyle}
+                                loading="eager"
+                            />
+                            <div style={desktopFormContainerStyle}>
+                                {renderActiveForm()}
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-
-            <Footer />
+                    <Footer />
+                </>
+            ) : (
+                // 移动版布局
+                <>
+                    <Navbar />
+                    <div style={contentStyle}>
+                        <div style={mobileBgStyle}>
+                            <div style={mobileLogoStyle}>PTag</div>
+                            <div style={mobileFormContainerStyle}>
+                                {renderActiveForm()}
+                            </div>
+                        </div>
+                    </div>
+                    <Footer />
+                </>
+            )}
         </div>
     );
 };

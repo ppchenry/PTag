@@ -9,7 +9,8 @@ import Login from './pages/Login';
 import { Helmet } from 'react-helmet';
 import './fonts.css';
 import './App.css';
-import PetLocationMap from './pages/PetLocationMap';
+import GeolocationPage from './pages/Geolocation';
+import Info from './pages/Info';
 
 const App = () => {
   return (
@@ -33,8 +34,9 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/landing" element={<Landing />} />
-          <Route path="/login" element={<Login />} />
-          <Route path='/pet-location' element={<PetLocationMap />} />
+          <Route path="/access" element={<Login />} />
+          <Route path='/qr_info_geolocation' element={<GeolocationPage />} />
+          <Route path='/pet_detail_home' element={<Info />} />
           <Route path="/register" element={<Login initialTab="register" />} />
         </Routes>
       </BrowserRouter>

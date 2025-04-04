@@ -1,14 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { useNavigate } from 'react-router-dom';
 
 const Landing = () => {
     const [petTagNumber, setPetTagNumber] = useState('');
     const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
     const [showHelpImage, setShowHelpImage] = useState(false); // 控制帮助图片的显示
     const helpImageRef = useRef(null); // 用于检测点击外部区域
-    const navigate = useNavigate();
+    const formRef = useRef(null); // 用于表单提交引用
 
     // 监听窗口大小变化
     useEffect(() => {
@@ -45,8 +44,8 @@ const Landing = () => {
             return;
         }
 
-        // 跳转到宠物位置地图页面，携带宠物牌号码作为查询参数
-        navigate(`/pet-location?qr=${petTagNumber.trim()}`);
+        // 直接提交表单到ptagair_active.php
+        formRef.current.submit();
     };
 
     // 处理图标点击
@@ -82,7 +81,7 @@ const Landing = () => {
         width: '100%',
         height: '100%',
         objectFit: 'cover',
-        objectPosition: isMobile ?'75% center':'center center',
+        objectPosition: isMobile ? '75% center' : 'center center',
         display: 'block',
         transition: 'transform 0.2s linear',
         willChange: 'transform',
@@ -162,6 +161,7 @@ const Landing = () => {
         borderRadius: '3px',
         fontSize: isMobile ? '12px' : 'var(--font-size-lg)',
         boxSizing: 'border-box',
+        textTransform: 'uppercase', // 添加大写转换，与原HTML一致
     };
 
     const buttonContainerStyle = {
@@ -182,8 +182,6 @@ const Landing = () => {
         cursor: 'pointer',
         width: isMobile ? '100%' : 'auto',
     };
-
-    
 
     const linkStyle = {
         display: 'block',
@@ -213,7 +211,12 @@ const Landing = () => {
                         )}
                     </h1>
 
-                    <form onSubmit={handleSubmit}>
+                    <form
+                        ref={formRef}
+                        action="https://www.ptag.com.hk/php/ptagair_active.php"
+                        method="POST"
+                        autoComplete="on"
+                    >
                         <div style={formGroupStyle}>
                             <div style={labelContainerStyle}>
                                 <label style={labelTextStyle} htmlFor="petTag">寵物牌上號碼</label>
@@ -243,27 +246,35 @@ const Landing = () => {
                                 style={inputStyle}
                                 type="text"
                                 id="petTag"
+                                name="ptagcode" // 修改为与PHP脚本匹配的名称
                                 placeholder="寵物牌上號碼"
                                 value={petTagNumber}
                                 onChange={(e) => setPetTagNumber(e.target.value)}
+                                maxLength="6" // 限制为6个字符
+                                required
                             />
                         </div>
 
                         {/* 移动端在按钮上方显示链接 */}
                         {isMobile && (
                             <div style={{ textAlign: 'center' }}>
-                                <a href="#" style={linkStyle}>PTag寵物牌使用手冊</a>
+                                <a href="../downloads/PTag寵物牌使用手冊_v2.1.pdf" target="_blank" style={linkStyle}>PTag寵物牌使用手冊</a>
                             </div>
                         )}
 
                         <div style={buttonContainerStyle}>
-                            <button style={primaryButtonStyle} type="submit">確認</button>
-                            
+                            <button
+                                style={primaryButtonStyle}
+                                type="button"
+                                onClick={() => formRef.current.submit()}
+                            >
+                                啟用/查閱 PTag
+                            </button>
                         </div>
 
                         {/* 桌面端在按钮下方显示链接 */}
                         {!isMobile && (
-                            <a href="#" style={linkStyle}>PTag寵物牌使用手冊</a>
+                            <a href="../downloads/PTag寵物牌使用手冊_v2.1.pdf" target="_blank" style={linkStyle}>PTag寵物牌使用手冊</a>
                         )}
                     </form>
                 </div>
